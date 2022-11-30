@@ -80,7 +80,7 @@ const Navbar = () => {
       </div>
       {isChainError && (
         <div className="flex justify-center items-center bg-red-700 text-white nexa-reg-20 py-2">
-          You're connected to the wrong network. Switch to Ethereum Mainnet to
+          You&apos;re connected to the wrong network. Switch to Ethereum Mainnet to
           use the app.
         </div>
       )}
