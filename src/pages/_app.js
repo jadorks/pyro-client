@@ -13,7 +13,7 @@ import { PyroDappProvider } from "../providers/PyroProvider/PyroDappProvider";
 const config = {
   readOnlyChainId: Localhost.chainId,
   readOnlyUrls: {
-    // [Mainnet.chainId]: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
+    [Mainnet.chainId]: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
     [Localhost.chainId]: "http://127.0.0.1:7545",
   },
   connectors: {

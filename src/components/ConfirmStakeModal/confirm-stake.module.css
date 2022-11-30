@@ -1,0 +1,93 @@
+.modal_dialog {
+  @apply fixed inset-0 z-20 overflow-y-auto;
+}
+
+.modal_dialog_container {
+  @apply min-h-screen px-4 text-center;
+}
+
+.modal_dialog_overlay {
+  @apply fixed inset-0 bg-[#000000] opacity-80;
+}
+
+.modal_dialog_container_spacer {
+  @apply inline-block h-screen align-middle;
+}
+
+.modal_dialog_content {
+  @apply inline-block w-full max-w-md my-8;
+  @apply overflow-hidden text-left align-middle;
+  @apply transition-all transform bg-[#202020] shadow-xl rounded-2xl;
+  @apply border border-solid border-[#202020];
+}
+
+.modal_dialog_header {
+  @apply px-6 py-4 w-full;
+}
+
+.modal_dialog_header_content {
+  @apply flex nexa-reg-18 w-full items-center justify-between pb-2;
+  @apply border-b-[1px];
+}
+
+.modal_dialog_close {
+  @apply text-white cursor-pointer;
+  font-size: 32px !important;
+  transition: all 0.2s linear 0s;
+}
+
+.modal_dialog_close:hover {
+  @apply text-[#FA4F27];
+}
+
+.modal_dialog_title {
+  @apply text-white;
+}
+
+.modal_dialog_body {
+  @apply p-6 pt-1;
+}
+
+.modal_dialog_notice {
+  @apply flex items-center gap-2;
+  @apply mt-2 p-4 rounded-2xl text-white;
+  background-color: #2e2e2e;
+}
+
+.modal_dialog_notice p {
+  @apply montserrat-med-14;
+}
+
+.modal_dialog_buttons {
+  @apply flex flex-col md:flex-row justify-center pt-6 gap-4 md:gap-6;
+}
+
+.modal_dialog_buttons button {
+  position: relative;
+  @apply rounded-3xl w-full py-2 text-white nexa-reg-18 uppercase;
+  z-index: 0;
+  background: #f92032;
+}
+
+.modal_dialog_buttons button:not(:disabled)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    98.95deg,
+    #ffffff 2.81%,
+    #ffffff 2.82%,
+    rgba(0, 0, 0, 0.53) 51.36%,
+    #ffffff 96.85%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  @apply rounded-3xl p-[0.2rem];
+  z-index: -1;
+}
+
+.modal_dialog_buttons button[disabled] {
+  @apply bg-black border-[#4D4D4D] border-2;
+  @apply opacity-90 text-[#4D4D4D];
+}

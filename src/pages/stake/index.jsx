@@ -11,7 +11,6 @@ export default function StakePage() {
     // const staker = useStakerInfo(account);
     const rewards = usePendingRewards(account);
 
-    // const poolInfo = usePoolInfo();
     const userInfo = useStakerInfo(account);
 
     return (
@@ -20,7 +19,7 @@ export default function StakePage() {
         <title>$YANTRA | SRI</title>
       </Head> */}
         <InfoSection userInfo={userInfo} pendingRewards={rewards}/>
-        <Stake />
+        <Stake userInfo={userInfo} pendingRewards={rewards} />
       </>
     );
   }

@@ -9,7 +9,7 @@ const DocuBox = () => {
         <div className={style.info__header}>
           <p className={style.info__title}>More Info</p>
           <a
-            href="https://etherscan.io/token/0x89568569da9c83cb35e59f92f5df2f6ca829eeee"
+            href="https://etherscan.io/token/0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72"
             target="_blank"
             rel="noreferrer"
             className={style.info__link}
@@ -22,7 +22,7 @@ const DocuBox = () => {
           <div className={style.body__content}>
             <p>Pyro Staking Instructions</p>
             <a
-              href="https://pyrodapp.com"
+              href="https://pyrotokenerc.com"
               target="_blank"
               rel="noreferrer"
               className={style.info__link}

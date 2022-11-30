@@ -22,7 +22,7 @@ const Navbar = () => {
     <>
       <div className={style.navbar}>
         <div className={style.navbar__left}>
-          <img src={Logo.src} alt="" />
+          <a href="https://pyrotokenerc.com" target="_blank" rel="noopener noreferrer"><img src={Logo.src} alt="" /></a>
         </div>
         <div className={style.navbar__right}>
           <button

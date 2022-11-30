@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import style from "./info-box.module.css";
-import Info1 from "../../assets/images/info_one.svg";
+import Info3 from "../../assets/images/info_three.svg";
 import intervalToDuration from "date-fns/intervalToDuration";
 import format from "date-fns/format";
 
@@ -35,7 +35,7 @@ const TimeBox = ({ timestamp }) => {
       <div className={style.content}>
         <div className={style.info__header}>
           <p>Unlock Time</p>
-          <img src={Info1.src} alt="" />
+          <img src={Info3.src} alt="" />
         </div>
         <div className={style.info__value}>
           <div className={style.time}>
