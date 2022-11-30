@@ -24,7 +24,6 @@ const TimeBox = ({ timestamp }) => {
 
   useEffect(() => {
     if(new Date().valueOf() >= timestamp && timer){
-      console.log("checking")
       clearInterval(timerInterval);
       setTimer();
     }

@@ -5,16 +5,14 @@ import {
   DAppProvider,
   MetamaskConnector,
   CoinbaseWalletConnector,
-  Localhost,
 } from "@usedapp/core";
 import { WalletConnectConnector } from "@usedapp/wallet-connect-connector";
 import { PyroDappProvider } from "../providers/PyroProvider/PyroDappProvider";
 
 const config = {
-  readOnlyChainId: Localhost.chainId,
+  readOnlyChainId: Mainnet.chainId,
   readOnlyUrls: {
     [Mainnet.chainId]: process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
-    [Localhost.chainId]: "http://127.0.0.1:7545",
   },
   connectors: {
     metamask: new MetamaskConnector(),
@@ -26,13 +24,13 @@ const config = {
       },
     }),
   },
-  // multicallVersion: 2,
-  // multicallAddresses: {
-  //   [Mainnet.chainId]: "0x5ba1e12693dc8f9c48aad8770482f4739beed696",
-  // },
+  multicallVersion: 2,
+  multicallAddresses: {
+    [Mainnet.chainId]: "0x5ba1e12693dc8f9c48aad8770482f4739beed696",
+  },
   gasLimitBufferPercentage: 20,
   autoConnect: true,
-  // networks: [Mainnet],
+  networks: [Mainnet],
   noMetamaskDeactivate: true,
 };
 

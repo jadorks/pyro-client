@@ -45,7 +45,7 @@ function PyroDappProvider({ children }) {
 
   useEffect(() => {
     if (account != undefined && chainId != undefined) {
-      if (chainId != Localhost.chainId) {
+      if (chainId != Mainnet.chainId) {
         setIsChainError(true);
         updateConfig({
           readOnlyUrls: {

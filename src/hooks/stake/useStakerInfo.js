@@ -1,4 +1,4 @@
-import { Localhost, useCall } from "@usedapp/core";
+import { Localhost, Mainnet, useCall } from "@usedapp/core";
 import { useStakeContract } from "../useContract";
 
 export const useStakerInfo = (userAddress) => {
@@ -11,7 +11,7 @@ export const useStakerInfo = (userAddress) => {
         method: "viewStake",
         args: [userAddress],
       },
-      { chainId: Localhost.chainId }
+      { chainId: Mainnet.chainId }
     ) ?? {};
 
   if (error) {

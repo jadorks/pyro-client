@@ -22,20 +22,18 @@ const providers = [
     icon: Coinbase,
   },
   {
-    options: { type: "coinbase" },
+    options: { type: "walletConnect" },
     displayName: "WalletConnect",
     icon: WalletConnect,
   },
 ];
 
 function WalletManager({ isOpen, onCloseModal }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { activateBrowserWallet, account, deactivate, error, isLoading } =
     useEthers();
   const [selectedKey, setSelectedKey] = useState(-1);
   const [copied, setCopied] = useState(false);
   const [hasCoinbaseWallet, setHasCoinbaseWallet] = useState(false);
-  const walletAddress = "0xabcd";
 
   useEffect(() => {
     if (window.walletLinkExtension != null) {

@@ -13,14 +13,14 @@ import {
 
 export function useTokenContract() {
   return new Contract(
-    TOKEN_ADDRESS[Localhost.chainId],
+    TOKEN_ADDRESS[Mainnet.chainId],
     new utils.Interface(ERC20ABI)
   );
 }
 
 export function useStakeContract() {
   return new Contract(
-    STAKE_ADDRESS[Localhost.chainId],
+    STAKE_ADDRESS[Mainnet.chainId],
     new utils.Interface(STAKE_ABI)
   );
 }

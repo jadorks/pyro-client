@@ -1,6 +1,6 @@
 import { Slider } from "@mui/material";
 import { withStyles } from "@mui/styles";
-import { Localhost, useEthers, useTokenBalance } from "@usedapp/core";
+import { Localhost, Mainnet, useEthers, useTokenBalance } from "@usedapp/core";
 import React, { useState, useEffect } from "react";
 import { TOKEN_ADDRESS } from "../../constants/address";
 import { useUnstakeTokens } from "../../hooks/stake/useUnstakeTokens";
@@ -23,7 +23,7 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [amount, setAmount] = useState(0);
   const stakeContract = useStakeContract();
-  const balance = useTokenBalance(TOKEN_ADDRESS[Localhost.chainId], account);
+  const balance = useTokenBalance(TOKEN_ADDRESS[Mainnet.chainId], account);
 
   const [formattedBalance, setFormattedBalance] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);

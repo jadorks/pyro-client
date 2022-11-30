@@ -1,4 +1,4 @@
-import { Localhost, useCall } from "@usedapp/core";
+import { Localhost, Mainnet, useCall } from "@usedapp/core";
 import { useStakeContract } from "../useContract";
 
 export const usePoolInfo = () => {
@@ -10,7 +10,7 @@ export const usePoolInfo = () => {
                 contract: stakeContract,
                 method: "viewPoolDetails",
                 args: []
-            }, {refresh: 10, chainId: Localhost.chainId}
+            }, {refresh: 10, chainId: Mainnet.chainId}
         ) ?? {};
 
     if (error) {

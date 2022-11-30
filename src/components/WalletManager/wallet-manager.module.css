@@ -115,5 +115,5 @@
   }
   
   .tooltip {
-    @apply text-left absolute bottom-0 left-0 top-6;
+    @apply text-left absolute bottom-0 left-0 top-12 md:top-6;
   }
