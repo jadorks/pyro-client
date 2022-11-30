@@ -136,7 +136,7 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
                       />
                     </svg>
                     <p>
-                      Kindly note that there is a 5% Tax for staking Pyro. An
+                      Kindly note that there is a 3% Tax for staking Pyro. An
                       early unstake (withdrawal before timer goes off) attracts
                       50% tax.
                     </p>
