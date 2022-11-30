@@ -15,9 +15,9 @@ export default function StakePage() {
 
     return (
       <>
-      {/* <Head>
-        <title>$YANTRA | SRI</title>
-      </Head> */}
+      <Head>
+        <title>Pyromatic | Staking</title>
+      </Head>
         <InfoSection userInfo={userInfo} pendingRewards={rewards}/>
         <Stake userInfo={userInfo} pendingRewards={rewards} />
       </>

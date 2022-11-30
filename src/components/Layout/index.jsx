@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Pyro</title>
+        <title>Pyromatic - Bringing a Whole New Meaning to HYPER Deflationary Tokens</title>
         <meta
           key="description"
           name="description"
