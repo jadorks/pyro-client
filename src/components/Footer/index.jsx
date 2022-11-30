@@ -20,14 +20,14 @@ const Footer = () => {
         <div className={style.footer__right}>
           <div className={style.socials}>
             <a
-              href="https://app.uniswap.org/#/swap?inputCurrency=0x89568569DA9C83CB35E59F92f5Df2F6CA829EEeE&outputCurrency=ETH&chain=mainnet"
+              href="https://app.uniswap.org/#/swap?outputCurrency=0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72"
               target="_blank"
               rel="noreferrer"
             >
               <img src={Uniswap.src} alt="" />
             </a>
             <a
-              href="https://www.dextools.io/app/ether/pair-explorer/0xb38cb6d6e5b413beef2140f335048e436a0f10fb"
+              href="https://www.dextools.io/app/en/ether/pair-explorer/0x11dc5efa7a52742529df17bf6f179543e306ac07"
               target="_blank"
               rel="noreferrer"
             >
