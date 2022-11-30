@@ -16,6 +16,7 @@ import { BigNumber } from "ethers";
 import SpinnerAlt from "../../assets/images/spinner-alt.svg";
 import WalletManager from "../WalletManager";
 import ConfirmStakeModal from "../ConfirmStakeModal";
+import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 
 const StakeWidget = ({ stakedTokens, rewards }) => {
   const { account } = useEthers();
@@ -30,6 +31,8 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isUnstaking, setIsUnstaking] = useState(false);
+
+  const { isChainError } = usePyroDapp();
 
   const { send: unstakeToken, state: unstakeState } = useUnstakeTokens();
 
@@ -209,7 +212,7 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
                 disabled={
                   amount <= 0 ||
                   compareNonTokenWithToken(balance, amount, 18) == -1 ||
-                  isUnstaking
+                  isUnstaking || isChainError
                 }
               >
                 Stake
@@ -217,7 +220,7 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
               <button
                 disabled={
                   stakedTokens == undefined || stakedTokens <= 0 ||
-                  isUnstaking
+                  isUnstaking || isChainError
                 }
                 onClick={handleUnstakeToken}
                 className="flex justify-center items-center gap-1"

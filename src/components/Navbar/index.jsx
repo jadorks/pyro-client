@@ -5,10 +5,12 @@ import WalletManager from "../WalletManager";
 import { Popover } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { shortenIfAddress, useEthers } from "@usedapp/core";
+import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 
 const Navbar = () => {
   const { account } = useEthers();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isChainError } = usePyroDapp(); 
 
   function closeModal() {
     setIsDialogOpen(false);
@@ -22,7 +24,13 @@ const Navbar = () => {
     <>
       <div className={style.navbar}>
         <div className={style.navbar__left}>
-          <a href="https://pyrotokenerc.com" target="_blank" rel="noopener noreferrer"><img src={Logo.src} alt="" /></a>
+          <a
+            href="https://pyrotokenerc.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={Logo.src} alt="" />
+          </a>
         </div>
         <div className={style.navbar__right}>
           <button
@@ -70,6 +78,12 @@ const Navbar = () => {
           )}
         </Popover>
       </div>
+      {isChainError && (
+        <div className="flex justify-center items-center bg-red-700 text-white nexa-reg-20 py-2">
+          You're connected to the wrong network. Switch to Ethereum Mainnet to
+          use the app.
+        </div>
+      )}
       <WalletManager isOpen={isDialogOpen} onCloseModal={closeModal} />
     </>
   );

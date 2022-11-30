@@ -10,7 +10,7 @@ export const usePoolInfo = () => {
                 contract: stakeContract,
                 method: "viewPoolDetails",
                 args: []
-            }, {chainId: Localhost.chainId}
+            }, {refresh: 10, chainId: Localhost.chainId}
         ) ?? {};
 
     if (error) {
