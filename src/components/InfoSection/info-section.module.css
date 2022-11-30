@@ -1,0 +1,8 @@
+.container{
+    @apply flex justify-center px-4 md:px-32 lg:px-0 items-center pt-4 lg:pt-4;
+}
+
+.content{
+    @apply flex justify-between flex-col items-center; 
+    @apply lg:flex-row gap-4 w-full lg:gap-16 lg:max-w-5xl;
+}

@@ -1,0 +1,79 @@
+.container{
+    position: relative;
+    @apply flex flex-col items-start text-white bg-[#202020] w-full py-8;
+    @apply rounded-2xl border-b-black border-b-8;
+    z-index: 0;
+}
+
+.container:before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:linear-gradient(90deg, #FBD407 0%, #FB2032 78%, #FB2032 100%); 
+    -webkit-mask: 
+       linear-gradient(#fff 0 0) content-box, 
+       linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude; 
+    @apply rounded-t-2xl pt-1;
+    z-index: -1;
+}
+
+.content{
+    @apply w-full px-6;
+}
+
+.stake__header{
+    @apply flex justify-between items-center pb-4;
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-image: linear-gradient(90deg, #F9D207 0%, #F92032 78%, #F92032 100%) 1;
+}
+
+.stake__title{
+    @apply nexa-reg-20;
+    background: linear-gradient(90deg, #F9D207 0%, #F92032 78%, #F92032 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stake__balance {
+    @apply montserrat-med-14;
+}
+
+.stake__form {
+    @apply flex flex-col py-6;
+}
+
+.stake__input {
+    @apply rounded-xl py-3 pl-4 pr-14;
+    @apply nexa-reg-20 text-white;
+    background: url("../../assets/images/pyro-input-bg.svg") no-repeat right;
+    background-size: cover
+}
+
+.stake__slider {
+    @apply flex justify-between pt-6 gap-8;
+}
+
+.stake__slider button {
+    @apply rounded-lg bg-[#4d4d4d] px-4 border-b-2 border-r-2 border-b-black border-r-black;
+    @apply montserrat-med-15;
+}
+
+.stake__buttons {
+    @apply flex flex-col md:flex-row justify-center gap-4 md:gap-6;
+}
+
+.stake__buttons button{
+    @apply rounded-3xl w-full py-2 text-white nexa-reg-18 uppercase;
+}
+
+.stake__buttons button:nth-child(1){
+    background: linear-gradient(342.71deg, #F9D207 -93.29%, #F92032 64.35%, #F92032 108.81%);
+}
+
+.stake__buttons button:nth-child(2){
+    @apply bg-black border-[#4D4D4D] border-2;
+}
+

@@ -1,0 +1,15 @@
+.container{
+    @apply flex justify-center px-4 md:px-32 lg:px-0 pt-12 pb-4 lg:pb-4;
+}
+
+.content{
+    @apply flex flex-col grow justify-between lg:flex-row gap-4 lg:gap-16 lg:max-w-5xl w-full;
+}
+
+.content__left{
+    @apply flex justify-center lg:grow;
+}
+
+.content__right{
+    @apply flex flex-col gap-4 lg:gap-5 justify-center items-center lg:justify-between;
+}

@@ -1,0 +1,37 @@
+.navbar{
+    @apply w-full flex justify-between items-center px-8 xl:px-32 py-8;
+}
+
+.navbar__right{
+    @apply hidden md:flex justify-between items-center gap-8 nexa-reg-18 text-white;
+}
+
+.connect_btn{
+    @apply rounded-3xl bg-red-500 px-10 py-2 text-white nexa-reg-18 uppercase;
+    background: linear-gradient(342.71deg, #F9D207 -93.29%, #F92032 64.35%, #F92032 108.81%);
+}
+
+.mobile__menu{
+    @apply block md:hidden;
+}
+
+.connect_btn_connected{
+    @apply relative rounded-3xl px-10 py-3 text-white nexa-reg-18 uppercase;
+    background: black;
+    z-index: 0;
+}
+
+.connect_btn_connected::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+    linear-gradient(98.95deg, #FFFFFF 2.81%, #FFFFFF 2.82%, rgba(0, 0, 0, 0.53) 51.36%, #FFFFFF 96.85%);
+    -webkit-mask: 
+       linear-gradient(#fff 0 0) content-box, 
+       linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude; 
+    @apply rounded-3xl p-[0.2rem];
+    z-index: -1;
+}

@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Inter-Regular";
+    src: url("../assets/fonts/Inter/Inter-Regular.woff2") format("woff2"),
+      url("../assets/fonts/Inter/Inter-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Montserrat-Bold";
+    src: url("../assets/fonts/Montserrat/Montserrat-Bold.woff2") format("woff2"),
+      url("../assets/fonts/Montserrat/Montserrat-Bold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Montserrat-Regular";
+    src: url("../assets/fonts/Montserrat/Montserrat-Regular.woff2") format("woff2"),
+      url("../assets/fonts/Montserrat/Montserrat-Regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Montserrat-Medium";
+    src: url("../assets/fonts/Montserrat/Montserrat-Medium.woff2") format("woff2"),
+      url("../assets/fonts/Montserrat/Montserrat-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Nexa-Regular";
+    src: url("../assets/fonts/NexaBold/NexaBold.woff2") format("woff2"),
+      url("../assets/fonts/NexaBold/NexaBold.woff") format("woff");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: #000000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

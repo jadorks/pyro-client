@@ -1,0 +1,61 @@
+.container{
+    position: relative;
+    @apply flex flex-col items-start text-white bg-[#202020] w-full lg:w-[22rem] py-4 lg:h-[10rem];
+    @apply rounded-2xl border-b-black border-b-8;
+    z-index: 0;
+}
+
+.container:before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:linear-gradient(90deg, #FBD407 0%, #FB2032 78%, #FB2032 100%); 
+    -webkit-mask: 
+       linear-gradient(#fff 0 0) content-box, 
+       linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude; 
+    @apply rounded-t-2xl pt-1;
+    z-index: -1;
+}
+
+.content{
+    @apply w-full px-8;
+}
+
+.info__header{
+    @apply flex justify-between items-center;
+}
+
+.info__header p{
+    @apply montserrat-med-12 text-[#807F7E];
+}
+
+.info__header img{
+    @apply h-auto w-8;
+}
+
+.info__value{
+    @apply flex gap-3 items-start pt-2;
+}
+
+.time__unit{
+    @apply text-center inter-reg-12 text-[#807F7E];
+}
+
+.time__value{
+    @apply text-center nexa-reg-25;
+}
+
+.time__separator{
+    @apply nexa-reg-25
+}
+
+.info__value p{
+    @apply montserrat-bold-25;
+}
+
+.unlock_date{
+    @apply flex pt-2;
+    @apply montserrat-med-12 text-[#807F7E];
+}
