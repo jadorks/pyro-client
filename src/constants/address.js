@@ -7,7 +7,7 @@ export const TOKEN_ADDRESS = {
 
 export const STAKE_ADDRESS = {
   [Mainnet.chainId]: "0x07147AD3B47C2def4EB2Ea4c961e9088d00f6Ed8",
-  [Localhost.chainId]: "0x0344fF773B5b108A4d20E329B367eB9f350B8757",
+  [Localhost.chainId]: "0x6783D41F71a73291333831B95fFbaBe70693e805",
 };
 
 export const PYRO_ETH_PAIR = "0x11dc5efa7a52742529df17bf6f179543e306ac07";
