@@ -26,7 +26,7 @@ const DocuBox = () => {
           <div className={style.body__content}>
             <p>Pyro Staking Instructions</p>
             <a
-              href="https://pyrotokenerc.com"
+              href="/docs/instructions.pdf"
               target="_blank"
               rel="noreferrer"
               className={style.info__link}
