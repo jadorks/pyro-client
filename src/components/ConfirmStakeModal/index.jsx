@@ -9,6 +9,7 @@ import { utils } from "ethers";
 import { useStakeTokens } from "../../hooks/stake/useStakeTokens";
 import { useRouter } from "next/router";
 import SpinnerAlt from "../../assets/images/spinner-alt.svg";
+import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 
 const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
   const router = useRouter();
@@ -22,6 +23,10 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
   const [isStaking, setIsStaking] = useState(false);
 
   const [isApproved, setIsApproved] = useState(false);
+  const { poolInfo } = usePyroDapp();
+
+  const depositFee = poolInfo ? poolInfo?.depositFee : "300";
+  const earlyWithdrawalFee = poolInfo ? poolInfo?.earlyWithdrawFee : "5000";
 
   const handleApprove = () => {
     try {
@@ -136,9 +141,9 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
                       />
                     </svg>
                     <p>
-                      Kindly note that there is a 3% Tax for staking Pyro. An
-                      early unstake (withdrawal before timer goes off) attracts
-                      50% tax.
+                      Kindly note that there is a {depositFee/100}% Tax for staking
+                      Pyro. An early unstake (withdrawal before timer goes off)
+                      attracts {earlyWithdrawalFee/100}% tax.
                     </p>
                   </div>
                   <div className={style.modal_dialog_buttons}>

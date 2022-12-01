@@ -1,25 +1,18 @@
 import InfoSection from "../../components/InfoSection";
 import Stake from "../../components/Stake";
 import Head from "next/head";
-import { usePoolInfo } from "../../hooks/stake/usePoolInfo";
-import { useStakerInfo } from "../../hooks/stake/useStakerInfo";
-import {useEthers} from "@usedapp/core";
-import { usePendingRewards } from "../../hooks/stake/usePendingRewards";
+import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 
 export default function StakePage() {
-    const { account } = useEthers();
-    // const staker = useStakerInfo(account);
-    const rewards = usePendingRewards(account);
-
-    const userInfo = useStakerInfo(account);
+    const {userRewards, userInfo} = usePyroDapp();
 
     return (
       <>
       <Head>
         <title>Pyromatic | Staking</title>
       </Head>
-        <InfoSection userInfo={userInfo} pendingRewards={rewards}/>
-        <Stake userInfo={userInfo} pendingRewards={rewards} />
+        <InfoSection userInfo={userInfo} pendingRewards={userRewards}/>
+        <Stake />
       </>
     );
   }

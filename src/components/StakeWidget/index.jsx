@@ -17,8 +17,9 @@ import SpinnerAlt from "../../assets/images/spinner-alt.svg";
 import WalletManager from "../WalletManager";
 import ConfirmStakeModal from "../ConfirmStakeModal";
 import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
+import { useRouter } from "next/router";
 
-const StakeWidget = ({ stakedTokens, rewards }) => {
+const StakeWidget = ({ stakedTokens }) => {
   const { account } = useEthers();
   const [modalOpen, setModalOpen] = useState(false);
   const [amount, setAmount] = useState(0);
@@ -34,13 +35,15 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
 
   const { isChainError } = usePyroDapp();
 
+  const router = useRouter();
+
   const { send: unstakeToken, state: unstakeState } = useUnstakeTokens();
 
   useEffect(() => {
     if (isUnstaking && unstakeState.status == "Success") {
       alert("Successfully unstaked");
       setIsUnstaking(false);
-      setAmount(0);
+      router.reload();
     } else if (
       isUnstaking &&
       (unstakeState.status == "Fail" || unstakeState.status == "Exception")
@@ -174,7 +177,7 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
         <div className={style.stake__header}>
           <p className={style.stake__title}>Stake</p>
           <p className={style.stake__balance}>
-            Balance:{genFormatter.format(formattedBalance)}
+            Balance:{" "}{genFormatter.format(formattedBalance)}
           </p>
         </div>
         <div className={style.stake__form}>
@@ -212,15 +215,18 @@ const StakeWidget = ({ stakedTokens, rewards }) => {
                 disabled={
                   amount <= 0 ||
                   compareNonTokenWithToken(balance, amount, 18) == -1 ||
-                  isUnstaking || isChainError
+                  isUnstaking ||
+                  isChainError
                 }
               >
                 Stake
               </button>
               <button
                 disabled={
-                  stakedTokens == undefined || stakedTokens <= 0 ||
-                  isUnstaking || isChainError
+                  stakedTokens == undefined ||
+                  stakedTokens <= 0 ||
+                  isUnstaking ||
+                  isChainError
                 }
                 onClick={handleUnstakeToken}
                 className="flex justify-center items-center gap-1"

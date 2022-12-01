@@ -3,6 +3,9 @@ import { ChainId, Localhost, Mainnet, useEthers, useUpdateConfig } from "@usedap
 import PyroDappContext from "./context";
 import { useEthUSDTContract, usePyroEthContract } from "../../hooks/useContract";
 import { usePrice } from "../../hooks/usePrice";
+import { useStakerInfo } from "../../hooks/stake/useStakerInfo";
+import { usePendingRewards } from "../../hooks/stake/usePendingRewards";
+import { usePoolInfo } from "../../hooks/stake/usePoolInfo";
 
 function PyroDappProvider({ children }) {
   const { account, chainId, library } = useEthers();
@@ -14,6 +17,10 @@ function PyroDappProvider({ children }) {
   const ethUSDTContract = useEthUSDTContract();
   const ethValue = usePrice(pyroEthContract, true, 18);
   const usdtValue = usePrice(ethUSDTContract, true, 12);
+
+  const userInfo = useStakerInfo(account);
+  const userRewards = usePendingRewards(account);
+  const poolInfo = usePoolInfo();
 
   useEffect(() => {
     setPrices({
@@ -70,7 +77,7 @@ function PyroDappProvider({ children }) {
   }, [isChainError, account]);
 
   return (
-    <PyroDappContext.Provider value={{ isChainError, prices }}>
+    <PyroDappContext.Provider value={{ isChainError, prices, userInfo, userRewards, poolInfo }}>
       {children}
     </PyroDappContext.Provider>
   );

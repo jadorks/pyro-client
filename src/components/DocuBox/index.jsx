@@ -1,8 +1,12 @@
 import React from "react";
 import style from "./docu-box.module.css";
 import ExternalLink from "../../assets/images/external-link.svg";
+import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
+import { utils } from "ethers";
 
 const DocuBox = () => {
+
+  const {poolInfo} = usePyroDapp();
   return (
     <div className={style.container}>
       <div className={style.content}>
@@ -33,7 +37,7 @@ const DocuBox = () => {
           </div>
           <div className={style.body__content}>
             <p>Pyro APR</p>
-            <div className={style.apr}>20.0%</div>
+            <div className={style.apr}>{poolInfo ? `${utils.formatUnits(poolInfo?.apr, 2)}%` : "-"}</div>
           </div>
         </div>
       </div>
