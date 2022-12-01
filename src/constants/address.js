@@ -6,7 +6,7 @@ export const TOKEN_ADDRESS = {
 };
 
 export const STAKE_ADDRESS = {
-  [Mainnet.chainId]: "0x07147AD3B47C2def4EB2Ea4c961e9088d00f6Ed8",
+  [Mainnet.chainId]: "0x34aeE49b506E43FDD4bEa24f65e4E05EF5a07a0c",
   [Localhost.chainId]: "0x6783D41F71a73291333831B95fFbaBe70693e805",
 };
 
