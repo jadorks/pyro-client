@@ -44,5 +44,5 @@
 
 .usdt_value {
   @apply flex justify-end pt-2;
-  @apply montserrat-med-12 text-[#807F7E];
+  @apply montserrat-bold-14;
 }

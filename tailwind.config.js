@@ -49,6 +49,14 @@ module.exports = {
           fontFamily: theme("fontFamily.montserrat_med"),
           fontSize: "18px",
         },
+        ".montserrat-bold-12":{
+          fontFamily: theme("fontFamily.montserrat_bold"),
+          fontSize: "12px",
+        },
+        ".montserrat-bold-14":{
+          fontFamily: theme("fontFamily.montserrat_bold"),
+          fontSize: "14px",
+        },
         ".montserrat-bold-25":{
           fontFamily: theme("fontFamily.montserrat_bold"),
           fontSize: "25px",

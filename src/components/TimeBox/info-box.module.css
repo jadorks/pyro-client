@@ -57,5 +57,5 @@
 
 .unlock_date{
     @apply flex pt-2;
-    @apply montserrat-med-12 text-[#807F7E];
+    @apply montserrat-bold-12;
 }
