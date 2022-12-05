@@ -25,8 +25,8 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
   const [isApproved, setIsApproved] = useState(false);
   const { poolInfo } = usePyroDapp();
 
-  const depositFee = poolInfo ? poolInfo?.depositFee : "300";
-  const earlyWithdrawalFee = poolInfo ? poolInfo?.earlyWithdrawFee : "5000";
+  const depositFee = poolInfo ? poolInfo?.depositFee/100 : "";
+  const earlyWithdrawalFee = poolInfo ? poolInfo?.earlyWithdrawFee/100 : "";
 
   const handleApprove = () => {
     try {
@@ -141,9 +141,9 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
                       />
                     </svg>
                     <p>
-                      Kindly note that there is a {depositFee/100}% Tax for staking
+                      Kindly note that there is a {depositFee}% Tax for staking
                       Pyro. An early unstake (withdrawal before timer goes off)
-                      attracts {earlyWithdrawalFee/100}% tax.
+                      attracts {earlyWithdrawalFee}% tax.
                     </p>
                   </div>
                   <div className={style.modal_dialog_buttons}>
