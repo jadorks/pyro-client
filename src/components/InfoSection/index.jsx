@@ -10,7 +10,7 @@ const InfoSection = ({ userInfo, pendingRewards }) => {
     <div className={style.container}>
       <div className={style.content}>
         <InfoBox title={"Holder Amount Staked"} value={userInfo ? formatUnits(userInfo?.stakedAmount, 18) : 0} decimalPlaces = {5} />
-        <InfoBox title={"Holder Amount Earned"} value={pendingRewards ? formatUnits(pendingRewards, 18) : 0} decimalPlaces = {10} image={Info2.src} />
+        <InfoBox title={"Holder Amount Earned"} value={pendingRewards ? formatUnits(pendingRewards, 18) : 0} decimalPlaces = {10} image={Info2.src} showClaim={true} />
         <TimeBox timestamp={userInfo ? userInfo.lockEndTime*1000 : 0} />
       </div>
     </div>

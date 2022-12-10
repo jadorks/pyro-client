@@ -44,6 +44,18 @@
 }
 
 .usdt_value{
-    @apply flex;
+    @apply flex justify-between items-center;
     @apply montserrat-bold-12;
+}
+
+.usdt_value button{
+    position: relative;
+    @apply flex gap-1 rounded-3xl text-white px-2;
+    z-index: 0;
+    background: #F92032;
+}
+
+.usdt_value button[disabled]{
+    @apply bg-black border-[#4D4D4D] border-2;
+    @apply opacity-90 text-[#4D4D4D];
 }
