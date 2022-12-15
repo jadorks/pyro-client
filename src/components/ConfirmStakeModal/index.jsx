@@ -25,8 +25,8 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
   const [isApproved, setIsApproved] = useState(false);
   const { poolInfo } = usePyroDapp();
 
-  const depositFee = poolInfo ? poolInfo?.depositFee/100 : "";
-  const earlyWithdrawalFee = poolInfo ? poolInfo?.earlyWithdrawFee/100 : "";
+  const depositFee = poolInfo ? poolInfo?.depositFee / 100 : "";
+  const earlyWithdrawalFee = poolInfo ? poolInfo?.earlyWithdrawFee / 100 : "";
 
   const handleApprove = () => {
     try {
@@ -140,11 +140,15 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
                         d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
                       />
                     </svg>
-                    <p>
-                      Kindly note that there is a {depositFee}% Tax for staking
-                      Pyro. An early unstake (withdrawal before timer goes off)
-                      attracts {earlyWithdrawalFee}% tax.
-                    </p>
+                    <div>
+                      <p>
+                        Kindly note that there is a {depositFee}% Tax for staking
+                        Pyro. An early unstake (withdrawal before timer goes off)
+                        attracts {earlyWithdrawalFee}% tax.
+                      </p>
+                      <p className="mt-2">APR and Staking Deposit % are variable and subject to change*</p>
+                    </div>
+
                   </div>
                   <div className={style.modal_dialog_buttons}>
                     <button

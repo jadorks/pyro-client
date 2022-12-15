@@ -1,10 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import style from "./docu-box.module.css";
 import ExternalLink from "../../assets/images/external-link.svg";
 import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 import { utils } from "ethers";
+import APRNoticeModal from "../APRNoticeModal";
 
 const DocuBox = () => {
+
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const closeModal = () => {
+    setModalOpen(false);
+  }
 
   const {poolInfo} = usePyroDapp();
   return (
@@ -37,10 +44,11 @@ const DocuBox = () => {
           </div>
           <div className={style.body__content}>
             <p>Pyro APR</p>
-            <div className={style.apr}>{poolInfo ? `${utils.formatUnits(poolInfo?.apr, 2)}%` : "-"}</div>
+            <div onClick={()=>{setModalOpen(true)}} className={style.apr}>{poolInfo ? `${utils.formatUnits(poolInfo?.apr, 2)}%` : "-"}</div>
           </div>
         </div>
       </div>
+      <APRNoticeModal isOpen={modalOpen} onCloseModal={closeModal} />
     </div>
   );
 };

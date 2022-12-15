@@ -54,7 +54,7 @@
 }
 
 .apr{
-    @apply montserrat-med-18 text-[#00FF29] px-3;
+    @apply montserrat-med-18 text-[#00FF29] px-3 cursor-pointer;
     background: url("../../assets/images/apr-background.svg") no-repeat center;
     background-size: contain;
 }
