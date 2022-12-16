@@ -7,14 +7,14 @@ import { parseDecimals } from "../../utils/utils";
 import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 import { useClaimRewards } from "../../hooks/stake/useClaimRewards";
 import { useRouter } from "next/router";
-import Uniswap from "../../assets/images/pyro-uniswap.svg";
+import PyroSwap from "../../assets/images/pyro-swap.png";
 import SpinnerAlt from "../../assets/images/spinner-alt.svg";
 
 const InfoBox = ({
   title,
   value = 0,
   decimalPlaces,
-  image = Uniswap.src,
+  image = PyroSwap.src,
   showClaim = false,
 }) => {
   const { prices, userInfo, userRewards } = usePyroDapp();
@@ -58,9 +58,9 @@ const InfoBox = ({
       <div className={style.content}>
         <div className={style.info__header}>
           <p>{title}</p>
-          {image == Uniswap.src ? (
+          {image == PyroSwap.src ? (
             <a
-              href="https://app.uniswap.org/#/swap?outputCurrency=0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72"
+              href="https://swap.pyrodapp.com/?spending_token=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&spending_chain_id=1&receiving_token=0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72&receiving_chain_id=1"
               target="_blank"
               rel="noreferrer"
             >

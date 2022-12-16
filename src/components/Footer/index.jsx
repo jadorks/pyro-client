@@ -4,7 +4,7 @@ import Dextools from "../../assets/images/pyro-dextools.svg";
 import Linktree from "../../assets/images/pyro-linktree.svg";
 import Telegram from "../../assets/images/pyro-tg.svg";
 import Twitter from "../../assets/images/pyro-twitter.svg";
-import Uniswap from "../../assets/images/pyro-uniswap.svg";
+import PyroSwap from "../../assets/images/pyro-swap.png";
 
 const Footer = () => {
   console.log(`Built by Embrace Tech
@@ -20,11 +20,11 @@ const Footer = () => {
         <div className={style.footer__right}>
           <div className={style.socials}>
             <a
-              href="https://app.uniswap.org/#/swap?outputCurrency=0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72"
+              href="https://swap.pyrodapp.com/?spending_token=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&spending_chain_id=1&receiving_token=0x1e2d230c7a7f4c679fb1378f1f51dedeae85cd72&receiving_chain_id=1"
               target="_blank"
               rel="noreferrer"
             >
-              <img src={Uniswap.src} alt="" />
+              <img src={PyroSwap.src} alt="" />
             </a>
             <a
               href="https://www.dextools.io/app/en/ether/pair-explorer/0x11dc5efa7a52742529df17bf6f179543e306ac07"
