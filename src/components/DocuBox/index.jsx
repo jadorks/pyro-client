@@ -44,7 +44,7 @@ const DocuBox = () => {
           </div>
           <div className={style.body__content}>
             <p>Pyro APR</p>
-            <div onClick={()=>{setModalOpen(true)}} className={style.apr}>{poolInfo ? `${utils.formatUnits(poolInfo?.apr, 2)}%` : "-"}</div>
+            <div onClick={()=>{setModalOpen(true)}} className={style.apr}>{poolInfo?.apr ? `${utils.formatUnits(poolInfo?.apr, 2)}%` : "-"}</div>
           </div>
         </div>
       </div>

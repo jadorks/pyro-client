@@ -1,14 +1,14 @@
 import { Localhost, Mainnet, useCall } from "@usedapp/core";
 import { useStakeContract } from "../useContract";
 
-export const useEarlyWithdrawFee = () => {
+export const useDepositFee = () => {
   const stakeContract = useStakeContract();
 
   const { value, error } =
     useCall(
       stakeContract && {
         contract: stakeContract,
-        method: "earlyWithdrawFee",
+        method: "depositFee",
         args: [],
       },
       { refresh: 10, chainId: Mainnet.chainId }

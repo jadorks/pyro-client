@@ -1,41 +1,67 @@
 [
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "t",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "prevStaking", "type": "address" },
+      { "internalType": "address", "name": "token", "type": "address" }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
   {
-    "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "burn",
-        "type": "uint256"
-      }
+      { "internalType": "uint16", "name": "attemptedFee", "type": "uint16" },
+      { "internalType": "uint16", "name": "maxFee", "type": "uint16" }
     ],
-    "name": "DepositFeeBurn",
-    "type": "event"
+    "name": "DepositFeeTooHigh",
+    "type": "error"
+  },
+  { "inputs": [], "name": "GuaranteeTooShort", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "attempted", "type": "uint16" },
+      { "internalType": "uint16", "name": "min", "type": "uint16" },
+      { "internalType": "uint16", "name": "max", "type": "uint16" }
+    ],
+    "name": "InvalidAPR",
+    "type": "error"
+  },
+  { "inputs": [], "name": "InvalidWithdraw", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint16", "name": "attemptedFee", "type": "uint16" },
+      { "internalType": "uint16", "name": "maxFee", "type": "uint16" }
+    ],
+    "name": "InvalidWithdrawFee",
+    "type": "error"
   },
   {
-    "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "active",
-        "type": "bool"
-      }
+      { "internalType": "uint32", "name": "attemptedLock", "type": "uint32" },
+      { "internalType": "uint32", "name": "maxLock", "type": "uint32" }
     ],
-    "name": "DepositFeeBurnStatus",
-    "type": "event"
+    "name": "LockTooLong",
+    "type": "error"
   },
+  {
+    "inputs": [
+      { "internalType": "uint32", "name": "unlockTime", "type": "uint32" }
+    ],
+    "name": "LockedStake",
+    "type": "error"
+  },
+  { "inputs": [], "name": "NoAvailableYield", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "needed", "type": "uint256" },
+      { "internalType": "uint256", "name": "owned", "type": "uint256" }
+    ],
+    "name": "NoRewardTokens",
+    "type": "error"
+  },
+  { "inputs": [], "name": "NoStakesRequired", "type": "error" },
+  { "inputs": [], "name": "StakingActive", "type": "error" },
+  { "inputs": [], "name": "StakingUnavailable", "type": "error" },
+  { "inputs": [], "name": "ZeroStake", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -47,50 +73,6 @@
       }
     ],
     "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "available",
-        "type": "bool"
-      }
-    ],
-    "name": "PoolAvailability",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "apr",
-        "type": "uint16"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "depositFee",
-        "type": "uint16"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "lockPeriod",
-        "type": "uint32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint16",
-        "name": "earlyWithdrawFee",
-        "type": "uint16"
-      }
-    ],
-    "name": "PoolConfigurated",
     "type": "event"
   },
   {
@@ -110,6 +92,43 @@
       }
     ],
     "name": "RewardClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "newAPR",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "newDepositFee",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "newLockPeriod",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "newWithdrawFee",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "available",
+        "type": "bool"
+      }
+    ],
+    "name": "StakingConfigured",
     "type": "event"
   },
   {
@@ -164,33 +183,29 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "yield",
+        "type": "uint256"
       }
     ],
     "name": "TokenUnstaked",
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "DEAD",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+    "inputs": [
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "uint16", "name": "appliedAPR", "type": "uint16" }
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "name": "annualYield",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "pure",
+    "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "adr",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "adr", "type": "address" }],
     "name": "authorize",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -198,385 +213,25 @@
   },
   {
     "inputs": [],
-    "name": "denominator",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "name": "available",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "adr",
-        "type": "address"
-      }
-    ],
-    "name": "isAuthorized",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "isOwner",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "stakerDetails",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "stakedAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rewardDebt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "lastChangeTime",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "lockEndTime",
-        "type": "uint32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
-    "name": "stakingToken",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "name": "availableRewardTokens",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address payable",
-        "name": "adr",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "adr",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "user", "type": "address" }
     ],
-    "name": "unauthorize",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "apr",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint16",
-        "name": "depositFee",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint16",
-        "name": "earlyWithdrawFee",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint32",
-        "name": "withdrawLockPeriod",
-        "type": "uint32"
-      },
-      {
-        "internalType": "bool",
-        "name": "active",
-        "type": "bool"
-      },
-      {
-        "internalType": "bool",
-        "name": "burn",
-        "type": "bool"
-      }
-    ],
-    "name": "setPoolConfiguration",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "apr",
-        "type": "uint16"
-      }
-    ],
-    "name": "setAPR",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "fee",
-        "type": "uint16"
-      }
-    ],
-    "name": "setDepositFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint16",
-        "name": "fee",
-        "type": "uint16"
-      }
-    ],
-    "name": "setEarlyWithdrawFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "active",
-        "type": "bool"
-      }
-    ],
-    "name": "setPoolAvailable",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "time",
-        "type": "uint32"
-      }
-    ],
-    "name": "setEarlyWithdrawLock",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "burn",
-        "type": "bool"
-      }
-    ],
-    "name": "setFeeBurn",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "t",
-        "type": "address"
-      }
-    ],
-    "name": "updateStakingToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "pendingReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "name": "canWithdrawTokensNoFee",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deltaTime",
-        "type": "uint256"
-      }
-    ],
-    "name": "yieldFromElapsedTime",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "annualYield",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "dailyYield",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "stake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "depositFeeFromAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "unstake",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -588,308 +243,394 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "staker",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "staker", "type": "address" }
     ],
-    "name": "forceClaimUnstake",
+    "name": "claimFor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "countAPRUpdates",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "denominator",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "depositFee",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "depositFeeFromAmount",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "earlyWithdrawFee",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyUnstake",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "staker", "type": "address" }
     ],
-    "name": "canWithdrawTokensNoFee",
+    "name": "emergencyUnstakeFor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCurrentAPR",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getLastAPRUpdate",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOwnPendingReward",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOwnStake",
     "outputs": [
       {
-        "internalType": "bool",
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "stakedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "oldStaked", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "oldRewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "newStaked", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "newRewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "aprIndex", "type": "uint256" },
+          {
+            "internalType": "uint32",
+            "name": "lastChangeTime",
+            "type": "uint32"
+          },
+          { "internalType": "uint32", "name": "lockEndTime", "type": "uint32" },
+          {
+            "internalType": "uint32",
+            "name": "oldLastChangeTime",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "oldLockEndTime",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct CombinedStakeState",
         "name": "",
-        "type": "bool"
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "staker", "type": "address" }
+    ],
+    "name": "getStake",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "t",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "stakedAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "oldStaked", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "oldRewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "newStaked", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "newRewardDebt",
+            "type": "uint256"
+          },
+          { "internalType": "uint256", "name": "aprIndex", "type": "uint256" },
+          {
+            "internalType": "uint32",
+            "name": "lastChangeTime",
+            "type": "uint32"
+          },
+          { "internalType": "uint32", "name": "lockEndTime", "type": "uint32" },
+          {
+            "internalType": "uint32",
+            "name": "oldLastChangeTime",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "oldLockEndTime",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct CombinedStakeState",
+        "name": "",
+        "type": "tuple"
       }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "adr", "type": "address" }],
+    "name": "isAuthorized",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "isOwner",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "pendingReward",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "previousStaking",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "rescuePrizeTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "t", "type": "address" }],
     "name": "rescueToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "viewPoolDetails",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "poolStakedTokens",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint16",
-            "name": "apr",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "depositFee",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint16",
-            "name": "earlyWithdrawFee",
-            "type": "uint16"
-          },
-          {
-            "internalType": "uint32",
-            "name": "withdrawLockPeriod",
-            "type": "uint32"
-          },
-          {
-            "internalType": "bool",
-            "name": "available",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "burnDeposit",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct PyroStaking.PoolConfiguration",
-        "name": "",
-        "type": "tuple"
-      }
+    "inputs": [
+      { "internalType": "uint16", "name": "newAPR", "type": "uint16" }
     ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "name": "setAPR",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bool", "name": "doCheck", "type": "bool" }],
+    "name": "setCheckV1",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint16", "name": "fee", "type": "uint16" }],
+    "name": "setDepositFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint16", "name": "fee", "type": "uint16" }],
+    "name": "setEarlyWithdrawFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint32", "name": "time", "type": "uint32" }],
+    "name": "setEarlyWithdrawLock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bool", "name": "active", "type": "bool" }],
+    "name": "setPoolAvailable",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "staker",
-        "type": "address"
-      }
+      { "internalType": "uint16", "name": "newAPR", "type": "uint16" },
+      { "internalType": "uint16", "name": "newDepositFee", "type": "uint16" },
+      { "internalType": "uint32", "name": "newLockPeriod", "type": "uint32" },
+      { "internalType": "uint16", "name": "newWithdrawFee", "type": "uint16" },
+      { "internalType": "bool", "name": "active", "type": "bool" }
     ],
-    "name": "viewStake",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "stakedAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rewardDebt",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastChangeTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lockEndTime",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct PyroStaking.StakeState",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "viewMyStake",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "stakedAmount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rewardDebt",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lastChangeTime",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "lockEndTime",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct PyroStaking.StakeState",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "viewMyPendingReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "viewAPRPercent",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "viewAPRPercentDecimals",
-    "outputs": [
-      {
-        "internalType": "uint16",
-        "name": "aprPercent",
-        "type": "uint16"
-      },
-      {
-        "internalType": "uint16",
-        "name": "decimalValue",
-        "type": "uint16"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "name": "setStakingConfiguration",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
-    "name": "simulateYearStake",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "unstakeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "depositFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "yield",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint32",
-        "name": "duration",
-        "type": "uint32"
-      }
-    ],
-    "name": "simulateStake",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "unstakeAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "depositFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "yield",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [],
+    "name": "stakedTokens",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stakingToken",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
     "name": "totalStakedTokens",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address payable", "name": "adr", "type": "address" }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "adr", "type": "address" }],
+    "name": "unauthorize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unstake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "staker", "type": "address" }
+    ],
+    "name": "unstakeFor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unstakeV1Only",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newToken", "type": "address" }
+    ],
+    "name": "updateStakingToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawLockPeriod",
+    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "uint256", "name": "deltaTime", "type": "uint256" },
+      { "internalType": "uint16", "name": "appliedAPR", "type": "uint16" }
+    ],
+    "name": "yieldFromElapsedTime",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "pure",
+    "type": "function"
   }
 ]

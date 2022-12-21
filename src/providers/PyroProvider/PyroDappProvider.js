@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { ChainId, Localhost, Mainnet, useEthers, useUpdateConfig } from "@usedapp/core";
+import {
+  ChainId,
+  Localhost,
+  Mainnet,
+  useEthers,
+  useUpdateConfig,
+} from "@usedapp/core";
 import PyroDappContext from "./context";
-import { useEthUSDTContract, usePyroEthContract } from "../../hooks/useContract";
+import {
+  useEthUSDTContract,
+  usePyroEthContract,
+} from "../../hooks/useContract";
 import { usePrice } from "../../hooks/usePrice";
 import { useStakerInfo } from "../../hooks/stake/useStakerInfo";
 import { usePendingRewards } from "../../hooks/stake/usePendingRewards";
-import { usePoolInfo } from "../../hooks/stake/usePoolInfo";
+import {
+  useEarlyWithdrawFee,
+  usePoolInfo,
+} from "../../hooks/stake/usePoolInfo";
+import { useAPR } from "../../hooks/stake/useAPR";
+import { useDepositFee } from "../../hooks/stake/useDepositFee";
+import { useTotalStakedTokens } from "../../hooks/stake/useTotalStakedTokens";
 
 function PyroDappProvider({ children }) {
   const { account, chainId, library } = useEthers();
   const updateConfig = useUpdateConfig();
   const [isChainError, setIsChainError] = useState(false);
   const [prices, setPrices] = useState({});
-
   const pyroEthContract = usePyroEthContract();
   const ethUSDTContract = useEthUSDTContract();
   const ethValue = usePrice(pyroEthContract, true, 18);
@@ -20,7 +34,14 @@ function PyroDappProvider({ children }) {
 
   const userInfo = useStakerInfo(account);
   const userRewards = usePendingRewards(account);
-  const poolInfo = usePoolInfo();
+  // const poolInfo = usePoolInfo();
+
+  const apr = useAPR();
+  const depositFee = useDepositFee();
+  const earlyWithdrawFee = useEarlyWithdrawFee();
+  const poolStakedTokens = useTotalStakedTokens();
+
+  const poolInfo = { apr, depositFee, earlyWithdrawFee, poolStakedTokens };
 
   useEffect(() => {
     setPrices({
@@ -77,18 +98,20 @@ function PyroDappProvider({ children }) {
   }, [isChainError, account]);
 
   return (
-    <PyroDappContext.Provider value={{ isChainError, prices, userInfo, userRewards, poolInfo }}>
+    <PyroDappContext.Provider
+      value={{ isChainError, prices, userInfo, userRewards, poolInfo }}
+    >
       {children}
     </PyroDappContext.Provider>
   );
 }
 
-function usePyroDapp(){
-    const context = React.useContext(PyroDappContext);
-    if (context === undefined) {
-      throw new Error("usePyroDapp must be used within a YantraDappProvider");
-    }
-    return context;
+function usePyroDapp() {
+  const context = React.useContext(PyroDappContext);
+  if (context === undefined) {
+    throw new Error("usePyroDapp must be used within a YantraDappProvider");
+  }
+  return context;
 }
 
-export {PyroDappProvider, usePyroDapp}
+export { PyroDappProvider, usePyroDapp };

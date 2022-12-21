@@ -11,6 +11,8 @@ const Stake = () => {
 
   const {userInfo, poolInfo} = usePyroDapp();
 
+  console.log(poolInfo)
+
   const userStakedTokens = userInfo ? userInfo?.stakedAmount : 0 ;
 
   return (
@@ -20,7 +22,7 @@ const Stake = () => {
           <StakeWidget stakedTokens={userStakedTokens} />
         </div>
         <div className={style.content__right}>
-          <TotalPyroBox value={poolInfo ? utils.formatUnits(poolInfo?.poolStakedTokens,18) : 0}/>
+          <TotalPyroBox value={poolInfo?.poolStakedTokens ? utils.formatUnits(poolInfo?.poolStakedTokens,18) : 0}/>
           <DocuBox/>
         </div>
       </div>
