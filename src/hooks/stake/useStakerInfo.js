@@ -8,7 +8,7 @@ export const useStakerInfo = (userAddress) => {
     useCall(
       userAddress && {
         contract: stakeContract,
-        method: "viewStake",
+        method: "getStake",
         args: [userAddress],
       },
       { chainId: Mainnet.chainId }

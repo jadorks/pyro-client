@@ -11,8 +11,6 @@ const Stake = () => {
 
   const {userInfo, poolInfo} = usePyroDapp();
 
-  console.log(poolInfo)
-
   const userStakedTokens = userInfo ? userInfo?.stakedAmount : 0 ;
 
   return (
