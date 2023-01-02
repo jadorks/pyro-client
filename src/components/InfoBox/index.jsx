@@ -8,7 +8,7 @@ import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 import { useClaimRewards } from "../../hooks/stake/useClaimRewards";
 import { useRouter } from "next/router";
 import PyroSwap from "../../assets/images/pyro-swap.png";
-import SpinnerAlt from "../../assets/images/spinner-alt.svg";
+import { useEthers } from "@usedapp/core";
 
 const InfoBox = ({
   title,
@@ -17,10 +17,11 @@ const InfoBox = ({
   image = PyroSwap.src,
   showClaim = false,
 }) => {
-  const { prices, userInfo, userRewards } = usePyroDapp();
+  const { prices, userRewards, userInfo } = usePyroDapp();
   const { send: claim, state: claimState } = useClaimRewards();
   const [isClaiming, setIsClaiming] = useState(false);
   const router = useRouter();
+  const { account } = useEthers();
 
   useEffect(() => {
     if (isClaiming && claimState.status == "Success") {
@@ -39,10 +40,6 @@ const InfoBox = ({
     }
   }, [claimState]);
 
-  const isLocked = () => {
-    return new Date().valueOf < userInfo?.lockEndTime * 1000;
-  };
-
   const handleClaim = () => {
     try {
       setIsClaiming(true);
@@ -51,6 +48,22 @@ const InfoBox = ({
       setIsClaiming(false);
       console.error(e);
     }
+  };
+
+  const isOpen = () => {
+    // check for both times
+    if (userInfo?.oldLockEndTime > 0 || userInfo?.lockEndTime > 0) {
+      if (
+        new Date().valueOf() > userInfo?.lockEndTime ||
+        (new Date().valueOf() > userInfo?.oldLockEndTime &&
+          new Date().valueOf() < userInfo?.lockEndTime)
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
   };
 
   return (
@@ -87,7 +100,11 @@ const InfoBox = ({
           {showClaim && (
             <div>
               <button
-                disabled={userRewards <= 0 || !isLocked() || isClaiming}
+                disabled={
+                  (userRewards <= 0 && !isOpen()) ||
+                  isClaiming ||
+                  account == undefined
+                }
                 onClick={handleClaim}
               >
                 {isClaiming ? "Claiming..." : "Claim Rewards"}

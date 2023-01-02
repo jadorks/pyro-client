@@ -1,8 +1,8 @@
 import { Localhost, Mainnet, useCall } from "@usedapp/core";
-import { useStakeContract } from "../useContract";
+import { useStakeUpgraderContract } from "../useContract";
 
 export const usePendingRewards = (userAddress) => {
-  const stakeContract = useStakeContract();
+  const stakeContract = useStakeUpgraderContract();
 
   const { value, error } =
     useCall(

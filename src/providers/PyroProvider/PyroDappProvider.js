@@ -99,7 +99,13 @@ function PyroDappProvider({ children }) {
 
   return (
     <PyroDappContext.Provider
-      value={{ isChainError, prices, userInfo, userRewards, poolInfo }}
+      value={{
+        isChainError,
+        prices,
+        userInfo,
+        userRewards,
+        poolInfo,
+      }}
     >
       {children}
     </PyroDappContext.Provider>

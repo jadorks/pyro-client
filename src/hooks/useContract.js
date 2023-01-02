@@ -1,7 +1,8 @@
 import { utils } from "ethers";
 import { Contract } from "@ethersproject/contracts";
 import { Mainnet, Localhost, useEthers } from "@usedapp/core";
-import STAKE_ABI from "../contracts/PyroStaking.json";
+import STAKE_ABI from "../contracts/PyroStakingV2.json";
+import STAKE_UPGRADER_ABI from "../contracts/PyroStakeUpgrader.json";
 import UniswapV2 from "../contracts/UniswapV2.json";
 import ERC20ABI from "../contracts/ERC20ABI.json";
 import {
@@ -23,6 +24,13 @@ export function useStakeContract() {
     STAKE_ADDRESS[Mainnet.chainId],
     new utils.Interface(STAKE_ABI)
   );
+}
+
+export function useStakeUpgraderContract() {
+  return new Contract(
+    STAKE_ADDRESS[Mainnet.chainId],
+    new utils.Interface(STAKE_UPGRADER_ABI)
+  )
 }
 
 export function usePyroEthContract() {

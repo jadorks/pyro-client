@@ -1,8 +1,8 @@
 import { useContractFunction } from "@usedapp/core";
-import { useStakeContract } from "../useContract";
+import { useStakeUpgraderContract } from "../useContract";
 
 export const useUnstakeTokens = () => {
-  const contract = useStakeContract();
+  const contract = useStakeUpgraderContract();
 
   const { state, send } = useContractFunction(contract, "unstake", {
     transactionName: "Unstake Tokens",

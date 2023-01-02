@@ -1,13 +1,13 @@
 import { Localhost, Mainnet, useCall } from "@usedapp/core";
-import { useStakeContract } from "../useContract";
+import { useStakeUpgraderContract } from "../useContract";
 
 export const useTotalStakedTokens = () => {
-  const stakeContract = useStakeContract();
+  const stakeUpgraderContract = useStakeUpgraderContract();
 
     const { value, error } =
       useCall(
-        stakeContract && {
-          contract: stakeContract,
+        stakeUpgraderContract && {
+          contract: stakeUpgraderContract,
           method: "totalStakedTokens",
           args: [],
         },
