@@ -55,7 +55,7 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
       isApproving &&
       (approveState.status == "Fail" || approveState.status == "Exception")
     ) {
-      alert("Approval failed");
+      alert(`Approval failed: ${approveState?.errorMessage}`);
       setIsApproved(false);
       setIsApproving(false);
     }
@@ -70,7 +70,7 @@ const ConfirmStakeModal = ({ isOpen, onCloseModal, stakeAmount, contract }) => {
       isStaking &&
       (stakeState.status == "Fail" || stakeState.status == "Exception")
     ) {
-      alert("Failed to stake");
+      alert(`Stake Failed: ${stakeState?.errorMessage}`);
       setIsStaking(false);
     }
   }, [stakeState]);
