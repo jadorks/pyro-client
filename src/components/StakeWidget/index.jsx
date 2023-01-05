@@ -10,6 +10,7 @@ import {
   compareNonTokenWithToken,
   genFormatter,
   onInputNumberChange,
+  parseDecimals,
 } from "../../utils/utils";
 import { formatUnits } from "ethers/lib/utils";
 import { BigNumber } from "ethers";
@@ -102,7 +103,7 @@ const StakeWidget = ({ stakedTokens }) => {
   };
 
   const setMaxValue = () => {
-    setAmount(formattedBalance);
+    setAmount(parseDecimals(formattedBalance, 4));
   };
 
   const setStakeValue = (value) => {
@@ -110,7 +111,7 @@ const StakeWidget = ({ stakedTokens }) => {
     if (balance) {
       const val = BigNumber.from(balance.mul(value).div(100));
       const res = formatUnits(val, 18);
-      setAmount(value == 100 ? res : (+res).toFixed(4));
+      setAmount(value == 100 ? parseDecimals(res, 4) : (+res).toFixed(4));
     }
   };
 
@@ -177,7 +178,7 @@ const StakeWidget = ({ stakedTokens }) => {
         <div className={style.stake__header}>
           <p className={style.stake__title}>Stake</p>
           <p className={style.stake__balance}>
-            Balance:{" "}{genFormatter.format(formattedBalance)}
+            Balance: {genFormatter.format(formattedBalance)}
           </p>
         </div>
         <div className={style.stake__form}>
@@ -225,6 +226,7 @@ const StakeWidget = ({ stakedTokens }) => {
                 disabled={
                   stakedTokens == undefined ||
                   stakedTokens <= 0 ||
+                  compareNonTokenWithToken(stakedTokens, amount, 18) == -1 ||
                   isUnstaking ||
                   isChainError
                 }

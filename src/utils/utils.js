@@ -13,11 +13,16 @@ export function onInputNumberChange(e, f) {
 }
 
 export function compareNonTokenWithToken(tokenValue, nonTokenValue, decimals) {
-  const convertedValue = utils.parseUnits(nonTokenValue, decimals);
-
-  if (tokenValue == undefined) {
+  if (
+    tokenValue == undefined ||
+    tokenValue == "" ||
+    nonTokenValue == undefined ||
+    nonTokenValue == ""
+  ) {
     return;
   }
+
+  const convertedValue = utils.parseUnits(nonTokenValue, decimals);
 
   if (BigNumber.from(tokenValue).lt(convertedValue)) {
     return -1;
@@ -28,7 +33,7 @@ export function compareNonTokenWithToken(tokenValue, nonTokenValue, decimals) {
   }
 }
 
-export function parseDecimals(num, decimals){
-  var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (decimals || -1) + '})?');
+export function parseDecimals(num, decimals) {
+  var re = new RegExp("^-?\\d+(?:.\\d{0," + (decimals || -1) + "})?");
   return num.toString().match(re)[0];
 }

@@ -6,6 +6,7 @@ import { parseDecimals } from "../../utils/utils";
 
 import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 import { useClaimRewards } from "../../hooks/stake/useClaimRewards";
+import { useClaimRewardsV1 } from "../../hooks/stake/v1/useClaimRewardsV1";
 import { useRouter } from "next/router";
 import PyroSwap from "../../assets/images/pyro-swap.png";
 import { useEthers } from "@usedapp/core";
@@ -19,6 +20,7 @@ const InfoBox = ({
 }) => {
   const { prices, userRewards, userInfo } = usePyroDapp();
   const { send: claim, state: claimState } = useClaimRewards();
+  const { send: claimV1, state: claimStateV1 } = useClaimRewardsV1();
   const [isClaiming, setIsClaiming] = useState(false);
   const router = useRouter();
   const { account } = useEthers();
@@ -33,17 +35,46 @@ const InfoBox = ({
       (claimState.status == "Fail" || claimState.status == "Exception")
     ) {
       alert(
-        claimState.errorMessage.charAt(0).toUpperCase() +
+        `Failed to claim: ${
+          claimState.errorMessage.charAt(0).toUpperCase() +
           claimState.errorMessage.slice(1)
+        }`
       );
       setIsClaiming(false);
     }
   }, [claimState]);
 
+  useEffect(() => {
+    if (isClaiming && claimStateV1.status == "Success") {
+      alert("Rewards claimed successfully");
+      setIsClaiming(false);
+      router.reload();
+    } else if (
+      isClaiming &&
+      (claimStateV1.status == "Fail" || claimStateV1.status == "Exception")
+    ) {
+      alert(
+        `Failed to claim: ${
+          claimStateV1.errorMessage.charAt(0).toUpperCase() +
+          claimStateV1.errorMessage.slice(1)
+        }`
+      );
+      setIsClaiming(false);
+    }
+  }, [claimStateV1]);
+
   const handleClaim = () => {
+    // check if the user has an old reward debt
+    // if they do, use claim v1 and if there is a new reward debt, alert them that they should claim again to claim v2 rewards
+    // if they do not have an old reward debt, use claim v2
+    //
     try {
       setIsClaiming(true);
-      void claim();
+      if (userInfo?.oldRewardDebt > 0) {
+        void claimV1();
+      } else {
+        void claim();
+      }
     } catch (e) {
       setIsClaiming(false);
       console.error(e);
@@ -51,17 +82,10 @@ const InfoBox = ({
   };
 
   const isOpen = () => {
-    // check for both times
-    if (userInfo?.oldLockEndTime > 0 || userInfo?.lockEndTime > 0) {
-      if (
-        new Date().valueOf() > userInfo?.lockEndTime ||
-        (new Date().valueOf() > userInfo?.oldLockEndTime &&
-          new Date().valueOf() < userInfo?.lockEndTime)
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+    if (userInfo?.oldRewardDebt > 0) {
+      return new Date().valueOf() > userInfo?.oldLockEndTime * 1000;
+    } else if (userInfo?.newRewardDebt > 0) {
+      return new Date().valueOf() > userInfo?.lockEndTime * 1000;
     }
     return false;
   };
@@ -101,7 +125,8 @@ const InfoBox = ({
             <div>
               <button
                 disabled={
-                  (userRewards <= 0 && !isOpen()) ||
+                  userRewards <= 0 ||
+                  !isOpen() ||
                   isClaiming ||
                   account == undefined
                 }
