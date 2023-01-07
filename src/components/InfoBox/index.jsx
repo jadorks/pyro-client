@@ -83,9 +83,9 @@ const InfoBox = ({
 
   const isOpen = () => {
     if (userInfo?.oldRewardDebt > 0) {
-      return new Date().valueOf() > userInfo?.oldLockEndTime * 1000;
+      return new Date().valueOf() >= userInfo?.oldLockEndTime * 1000;
     } else if (userInfo?.newRewardDebt > 0) {
-      return new Date().valueOf() > userInfo?.lockEndTime * 1000;
+      return new Date().valueOf() >= userInfo?.lockEndTime * 1000;
     }
     return false;
   };
