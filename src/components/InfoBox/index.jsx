@@ -10,6 +10,7 @@ import { useClaimRewardsV1 } from "../../hooks/stake/v1/useClaimRewardsV1";
 import { useRouter } from "next/router";
 import PyroSwap from "../../assets/images/pyro-swap.png";
 import { useEthers } from "@usedapp/core";
+import { BigNumber } from "ethers";
 
 const InfoBox = ({
   title,
@@ -125,7 +126,7 @@ const InfoBox = ({
             <div>
               <button
                 disabled={
-                  userRewards <= 0 ||
+                  userRewards && BigNumber.from(userRewards).lte(0) ||
                   !isOpen() ||
                   isClaiming ||
                   account == undefined

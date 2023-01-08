@@ -226,7 +226,6 @@ const StakeWidget = ({ stakedTokens }) => {
                 disabled={
                   stakedTokens == undefined ||
                   stakedTokens <= 0 ||
-                  compareNonTokenWithToken(stakedTokens, amount, 18) == -1 ||
                   isUnstaking ||
                   isChainError
                 }
