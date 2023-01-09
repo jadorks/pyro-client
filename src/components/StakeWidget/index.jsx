@@ -19,9 +19,11 @@ import WalletManager from "../WalletManager";
 import ConfirmStakeModal from "../ConfirmStakeModal";
 import { usePyroDapp } from "../../providers/PyroProvider/PyroDappProvider";
 import { useRouter } from "next/router";
+import { useUnstakeTokensV1 } from "../../hooks/stake/v1/useUnstakeV1";
 
 const StakeWidget = ({ stakedTokens }) => {
   const { account } = useEthers();
+  const { userInfo } = usePyroDapp();
   const [modalOpen, setModalOpen] = useState(false);
   const [amount, setAmount] = useState(0);
   const stakeContract = useStakeContract();
@@ -39,6 +41,11 @@ const StakeWidget = ({ stakedTokens }) => {
   const router = useRouter();
 
   const { send: unstakeToken, state: unstakeState } = useUnstakeTokens();
+  const { send: unstakeTokenV1, state: unstakeStateV1 } = useUnstakeTokensV1();
+
+  // we can get information on oldstaked or newstaked
+  // if old staked, call unstake v1
+  // if new staked, call unstake v2
 
   useEffect(() => {
     if (isUnstaking && unstakeState.status == "Success") {
@@ -49,10 +56,34 @@ const StakeWidget = ({ stakedTokens }) => {
       isUnstaking &&
       (unstakeState.status == "Fail" || unstakeState.status == "Exception")
     ) {
-      alert("Failed to unstake tokens");
+      alert(
+        `Failed to unstake tokens: ${
+          unstakeState.errorMessage.charAt(0).toUpperCase() +
+          unstakeState.errorMessage.slice(1)
+        }`
+      );
       setIsUnstaking(false);
     }
   }, [unstakeState]);
+
+  useEffect(() => {
+    if (isUnstaking && unstakeStateV1.status == "Success") {
+      alert("Successfully unstaked");
+      setIsUnstaking(false);
+      router.reload();
+    } else if (
+      isUnstaking &&
+      (unstakeStateV1.status == "Fail" || unstakeStateV1.status == "Exception")
+    ) {
+      alert(
+        `Failed to unstake tokens: ${
+          unstakeStateV1.errorMessage.charAt(0).toUpperCase() +
+          unstakeStateV1.errorMessage.slice(1)
+        }`
+      );
+      setIsUnstaking(false);
+    }
+  }, [unstakeStateV1]);
 
   useEffect(() => {
     if (balance) {
@@ -90,7 +121,11 @@ const StakeWidget = ({ stakedTokens }) => {
   const handleUnstakeToken = () => {
     setIsUnstaking(true);
     try {
-      void unstakeToken();
+      if (userInfo?.oldStaked > 0) {
+        void unstakeTokenV1();
+      } else {
+        void unstakeToken();
+      }
     } catch (e) {
       console.error("Exception Thrown: ", e);
       setIsUnstaking(false);

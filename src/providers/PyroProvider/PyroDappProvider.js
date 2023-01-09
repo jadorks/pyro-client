@@ -21,6 +21,7 @@ import {
 import { useAPR } from "../../hooks/stake/useAPR";
 import { useDepositFee } from "../../hooks/stake/useDepositFee";
 import { useTotalStakedTokens } from "../../hooks/stake/useTotalStakedTokens";
+import { usePendingRewardsV1 } from "../../hooks/stake/v1/usePendingRewardsV1";
 
 function PyroDappProvider({ children }) {
   const { account, chainId, library } = useEthers();
@@ -34,7 +35,7 @@ function PyroDappProvider({ children }) {
 
   const userInfo = useStakerInfo(account);
   const userRewards = usePendingRewards(account);
-  // const poolInfo = usePoolInfo();
+  const userRewardsV1 = usePendingRewardsV1(account);
 
   const apr = useAPR();
   const depositFee = useDepositFee();
@@ -104,6 +105,7 @@ function PyroDappProvider({ children }) {
         prices,
         userInfo,
         userRewards,
+        userRewardsV1,
         poolInfo,
       }}
     >

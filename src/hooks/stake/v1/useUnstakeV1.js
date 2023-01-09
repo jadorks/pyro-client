@@ -1,11 +1,11 @@
 import { useContractFunction } from "@usedapp/core";
 import { useStakeV1Contract } from "../../useContract";
 
-export const useClaimRewardsV1 = () => {
+export const useUnstakeTokensV1 = () => {
   const contract = useStakeV1Contract();
 
-  const { state, send } = useContractFunction(contract, "claim", {
-    transactionName: "Claim V1 Rewards",
+  const { state, send } = useContractFunction(contract, "unstake", {
+    transactionName: "Unstake V1 Tokens",
   });
 
   return { state, send };

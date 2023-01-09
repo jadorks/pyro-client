@@ -19,7 +19,7 @@ const InfoBox = ({
   image = PyroSwap.src,
   showClaim = false,
 }) => {
-  const { prices, userRewards, userInfo } = usePyroDapp();
+  const { prices, userRewards, userInfo, userRewardsV1 } = usePyroDapp();
   const { send: claim, state: claimState } = useClaimRewards();
   const { send: claimV1, state: claimStateV1 } = useClaimRewardsV1();
   const [isClaiming, setIsClaiming] = useState(false);
@@ -71,7 +71,7 @@ const InfoBox = ({
     //
     try {
       setIsClaiming(true);
-      if (userInfo?.oldRewardDebt > 0) {
+      if (userRewardsV1 > 0) {
         void claimV1();
       } else {
         void claim();
@@ -83,9 +83,9 @@ const InfoBox = ({
   };
 
   const isOpen = () => {
-    if (userInfo?.oldRewardDebt > 0) {
+    if (userRewardsV1 > 0) {
       return new Date().valueOf() >= userInfo?.oldLockEndTime * 1000;
-    } else if (userInfo?.newRewardDebt > 0) {
+    } else if (userRewards > 0) {
       return new Date().valueOf() >= userInfo?.lockEndTime * 1000;
     }
     return false;
@@ -126,7 +126,7 @@ const InfoBox = ({
             <div>
               <button
                 disabled={
-                  userRewards && BigNumber.from(userRewards).lte(0) ||
+                  (userRewards && BigNumber.from(userRewards).lte(0)) ||
                   !isOpen() ||
                   isClaiming ||
                   account == undefined
